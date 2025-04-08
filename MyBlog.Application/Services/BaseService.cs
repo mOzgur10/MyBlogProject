@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MyBlog.Application.DTOs;
+using MyBlog.Application.Services.IServices;
 using MyBlog.Application.Utilities.IUnitOfWorks;
 using MyBlog.Core.CoreEntities.BaseEntities;
 using MyBlog.Core.CoreEntities.Enums;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyBlog.Application.Services.BaseServices
+namespace MyBlog.Application.Services
 {
     public class BaseService<TDto, TEntity> : IBaseService<TDto, TEntity> where TDto : IBaseEntityDTO where TEntity : class, IBaseEntity
     {
@@ -35,7 +36,7 @@ namespace MyBlog.Application.Services.BaseServices
             return _unitOfWork.SaveChangesAsync().Result;
         }
 
-        
+
 
         public async Task<List<TDto>> GetAllAsync()
         {

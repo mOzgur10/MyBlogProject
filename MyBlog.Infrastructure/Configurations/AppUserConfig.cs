@@ -13,7 +13,7 @@ namespace MyBlog.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
-            builder.HasMany(a => a.Articles).WithOne(u => u.AppUser).HasForeignKey(u => u.AppUserId);
+            builder.HasMany(a => a.Articles).WithOne(u => u.AppUser).HasForeignKey(u => u.AppUserId).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

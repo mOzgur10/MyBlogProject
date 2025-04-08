@@ -12,13 +12,13 @@ namespace MyBlog.Core.CoreEntities.Entities
 {
     public class AppUser : IdentityUser , IBaseEntity
     {
-        public string FirstName { get; set; }
-        public string  LastName { get; set; }
+        //public string FirstName { get; set; }
+        //public string  LastName { get; set; }
 
-        [NotMapped]
-        public string FullName { get { return FirstName + " " + LastName; } }
+        //[NotMapped]
+        //public string FullName { get { return FirstName + " " + LastName; } }
 
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        //public string Id { get; set; } 
 
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public DateTime? UpdateDate { get; set; }

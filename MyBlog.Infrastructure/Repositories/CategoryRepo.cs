@@ -1,4 +1,5 @@
-﻿using MyBlog.Core.CoreEntities.Entities;
+﻿using MyBlog.Application.IRepositories;
+using MyBlog.Core.CoreEntities.Entities;
 using MyBlog.Infrastructure.Contexts;
 using MyBlog.Infrastructure.Repositories.BaseRepos;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyBlog.Infrastructure.Repositories
 {
-    public class CategoryRepo : BaseRepo<Category>
+    public class CategoryRepo : BaseRepo<Category>, ICategoryRepo
     {
         public CategoryRepo(AppDbContext appDbContext) : base(appDbContext)
         {

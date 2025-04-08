@@ -1,5 +1,5 @@
 ﻿using MyBlog.Application.DTOs;
-using MyBlog.Application.Services.BaseServices;
+using MyBlog.Application.Services.IServices;
 using MyBlog.Application.Utilities.IUnitOfWorks;
 using MyBlog.Core.CoreEntities.Entities;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyBlog.Application.Services
 {
-    public class CategoryService : BaseService<CategoryDTO,Category>
+    public class CategoryService : BaseService<CategoryDTO,Category>,ICategoryService
     {
         public CategoryService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {

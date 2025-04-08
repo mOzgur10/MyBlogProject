@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyBlog.Application.Services.BaseServices
+namespace MyBlog.Application.Services.IServices
 {
     public interface IBaseService<TDto, TEntity> where TDto : IBaseEntityDTO where TEntity : IBaseEntity
     {

@@ -18,7 +18,7 @@ namespace MyBlog.Infrastructure.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-E8OU015\\SQLEXPRESS;Database=DenemeBlog2;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=True;TrustServerCertificate=True");
             base.OnConfiguring(optionsBuilder);
         }
 
