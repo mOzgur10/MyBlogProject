@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Admin Paneli";
+}
+
+<div class="admin-container">
+    <!-- Sol Menü -->
+    <nav class="admin-sidebar">
+        <ul>
+            @* <li><a href="@Url.Action("Categories", "Admin")">Kategoriler</a></li>
+            <li><a href="@Url.Action("Users", "Admin")">Kullanıcılar</a></li> *@
+            <li><a href="@Url.Action("ArticleList", "Article")">Makaleler</a></li>
+        </ul>
+    </nav>
+
+   
+    <div class="admin-content">
+        @RenderBody()  
+    </div>
+</div>

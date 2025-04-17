@@ -21,32 +21,32 @@ namespace MyBlog.UI.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> UserProfile()
-        //{
-        //    var user = await _userManager.GetUserAsync(User); 
-            
+        [HttpGet]
+        public async Task<IActionResult> UserProfile()
+        {
+            var user = await _userManager.GetUserAsync(User);
 
-        //    var model = new AppUserVM()
-        //    {
-        //        Email = user.Email,
-        //        Articles = user.Articles.ToList()
-        //    };
 
-        //    return View(model);
-        //}
-        //[HttpGet]
-        //public async Task<IActionResult> ViewProfile(string id)
-        //{
-        //    var user = await _userManager.FindByIdAsync(id);
+            var model = new AppUserVM()
+            {
+                Email = user.Email,
+                Articles = user.Articles.ToList()
+            };
 
-        //    var model = new AppUserVM()
-        //    {
-        //        Email = user.Email,
-        //        Articles = user.Articles.ToList()
-        //    };
+            return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ViewProfile(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
 
-        //    return View("UserProfile", model);
-        //}
+            var model = new AppUserVM()
+            {
+                Email = user.Email,
+                Articles = user.Articles.ToList()
+            };
+
+            return View("UserProfile", model);
+        }
     }
 }

@@ -19,7 +19,11 @@ namespace MyBlog.Core.CoreEntities.Entities
         //public string FullName { get { return FirstName + " " + LastName; } }
 
         //public string Id { get; set; } 
-
+        public AppUser()
+        {
+            Articles = new List<Article>();
+            Comments = new List<Comment>();
+        }
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }

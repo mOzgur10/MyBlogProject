@@ -10,5 +10,6 @@ namespace MyBlog.Application.Services.IServices
 {
     public interface IArticleService: IBaseService<ArticleDTO,Article>
     {
+        Task IncreaseViewCountAsync(string id);
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyBlog.Infrastructure.Migrations
 {
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,8 +28,6 @@ namespace MyBlog.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -185,6 +183,8 @@ namespace MyBlog.Infrastructure.Migrations
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ViewCount = table.Column<int>(type: "int", nullable: false),
+                    LikeCount = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -214,6 +214,7 @@ namespace MyBlog.Infrastructure.Migrations
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ArticleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LikeCount = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -235,6 +236,26 @@ namespace MyBlog.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "558b5f08-f36d-401f-9908-e472e74c3469", "60f83a0e-0023-4350-adab-add1f4f584ea", "Editor", "EDITOR" },
+                    { "b42ccf3b-987c-4d9e-a5f6-5be02e62cb29", "f8bd5fc3-48ca-462f-834d-33df17c51ae1", "Writer", "WRITER" },
+                    { "cf0c57f4-f011-4d8a-bc5b-d5cb3d4188fc", "c983c46a-2676-4b2b-8761-2982e61d43a1", "Admin", "ADMIN" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreateDate", "DeleteDate", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Status", "TwoFactorEnabled", "UpdateDate", "UserName" },
+                values: new object[] { "c0f8b9e0-9d45-4b2a-bfa3-1a2bb8b5d001", 0, "ed5265d9-c684-4d43-b2e0-38f2609451f4", new DateTime(2025, 4, 9, 21, 16, 38, 968, DateTimeKind.Local).AddTicks(5729), null, "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAEAACcQAAAAEAJapzrFq7N8rOyTpjkYi06UKU3xUwWPveJO5gIWD/r8jzFq4yNIWx3n3n3Wexyu1A==", null, false, "11829c69-222a-445e-82e5-cdbd86d2d536", 0, false, null, "admin@example.com" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "cf0c57f4-f011-4d8a-bc5b-d5cb3d4188fc", "c0f8b9e0-9d45-4b2a-bfa3-1a2bb8b5d001" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Articles_AppUserId",

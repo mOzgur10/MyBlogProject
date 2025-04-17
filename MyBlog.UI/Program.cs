@@ -1,8 +1,14 @@
 using Microsoft.AspNetCore.Identity;
-
+using MyBlog.Application.IRepositories;
 using MyBlog.Application.Mappers;
+using MyBlog.Application.Services;
+using MyBlog.Application.Services.IServices;
+using MyBlog.Application.Utilities.IUnitOfWorks;
 using MyBlog.Core.CoreEntities.Entities;
 using MyBlog.Infrastructure.Contexts;
+using MyBlog.Infrastructure.DataSeeders;
+using MyBlog.Infrastructure.Repositories;
+using MyBlog.Infrastructure.Utilities.UnitOfWorks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,11 +28,23 @@ builder.Services.AddIdentity<AppUser,IdentityRole>(options =>
     options.Password.RequireDigit = false;
    
     options.User.RequireUniqueEmail = true;
-    options.SignIn.RequireConfirmedEmail = false;  // E-posta doðrulama zorunlu deðil
+    options.SignIn.RequireConfirmedEmail = false;  
     options.SignIn.RequireConfirmedPhoneNumber = false;
 
     
 }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
+builder.Services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAppUserRepo, AppUserRepo>();
+builder.Services.AddScoped<IArticleRepo, ArticleRepo>();
+builder.Services.AddScoped<ICommentRepo, CommentRepo>();
+builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
+builder.Services.AddScoped<IAppUserService, AppUserService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IArticleService, ArticleService>();
+//builder.Services.AddScoped<IAppUserRepo, AppUserRepo>();
 
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -39,6 +57,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -57,7 +77,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
 
 app.Run();

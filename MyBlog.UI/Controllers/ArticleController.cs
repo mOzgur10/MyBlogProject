@@ -15,9 +15,16 @@ namespace MyBlog.UI.Controllers
             return View();
         }
 
-        //public async Task<IActionResult> AddArticle()
+        //[HttpPost]
+        //public async Task<IActionResult> Create()
         //{
         //    _unitOfWork.ArticleService.Create
         //}
+
+        public IActionResult ArticleList()
+        {
+            var articleList = _unitOfWork.ArticleService.GetAllAsync();
+            return PartialView("_ArticleList", articleList);
+        }
     }
 }

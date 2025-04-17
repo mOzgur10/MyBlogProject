@@ -20,4 +20,11 @@
     <ProjectReference Include="..\MyBlog.Infrastructure\MyBlog.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="Views\Article\" />
+  </ItemGroup>
+
 </Project>

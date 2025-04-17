@@ -14,5 +14,6 @@ namespace MyBlog.Application.Utilities.IUnitOfWorks
         public IArticleService ArticleService { get; }
         public ICategoryService CategoryService { get; }
         public ICommentService CommentService { get; }
+        Task<int> CommitChangesAsync();
     }
 }

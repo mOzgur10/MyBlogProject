@@ -12,8 +12,8 @@ using MyBlog.Infrastructure.Contexts;
 namespace MyBlog.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250406150652_initial2")]
-    partial class initial2
+    [Migration("20250409181639_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,29 @@ namespace MyBlog.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "cf0c57f4-f011-4d8a-bc5b-d5cb3d4188fc",
+                            ConcurrencyStamp = "c983c46a-2676-4b2b-8761-2982e61d43a1",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "558b5f08-f36d-401f-9908-e472e74c3469",
+                            ConcurrencyStamp = "60f83a0e-0023-4350-adab-add1f4f584ea",
+                            Name = "Editor",
+                            NormalizedName = "EDITOR"
+                        },
+                        new
+                        {
+                            Id = "b42ccf3b-987c-4d9e-a5f6-5be02e62cb29",
+                            ConcurrencyStamp = "f8bd5fc3-48ca-462f-834d-33df17c51ae1",
+                            Name = "Writer",
+                            NormalizedName = "WRITER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -136,6 +159,13 @@ namespace MyBlog.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "c0f8b9e0-9d45-4b2a-bfa3-1a2bb8b5d001",
+                            RoleId = "cf0c57f4-f011-4d8a-bc5b-d5cb3d4188fc"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -232,6 +262,26 @@ namespace MyBlog.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c0f8b9e0-9d45-4b2a-bfa3-1a2bb8b5d001",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "ed5265d9-c684-4d43-b2e0-38f2609451f4",
+                            CreateDate = new DateTime(2025, 4, 9, 21, 16, 38, 968, DateTimeKind.Local).AddTicks(5729),
+                            Email = "admin@example.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                            NormalizedUserName = "ADMIN@EXAMPLE.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAJapzrFq7N8rOyTpjkYi06UKU3xUwWPveJO5gIWD/r8jzFq4yNIWx3n3n3Wexyu1A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "11829c69-222a-445e-82e5-cdbd86d2d536",
+                            Status = 0,
+                            TwoFactorEnabled = false,
+                            UserName = "admin@example.com"
+                        });
                 });
 
             modelBuilder.Entity("MyBlog.Core.CoreEntities.Entities.Article", b =>
@@ -257,6 +307,9 @@ namespace MyBlog.Infrastructure.Migrations
                     b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -266,6 +319,9 @@ namespace MyBlog.Infrastructure.Migrations
 
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("ViewCount")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -324,6 +380,9 @@ namespace MyBlog.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");

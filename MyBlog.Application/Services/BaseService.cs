@@ -14,7 +14,7 @@ namespace MyBlog.Application.Services
 {
     public class BaseService<TDto, TEntity> : IBaseService<TDto, TEntity> where TDto : IBaseEntityDTO where TEntity : class, IBaseEntity
     {
-        private readonly IUnitOfWork _unitOfWork;
+        protected readonly IUnitOfWork _unitOfWork;
         public BaseService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -44,7 +44,7 @@ namespace MyBlog.Application.Services
             return _unitOfWork.Mapper.Map<List<TDto>>(entityList);
         }
 
-        public async Task<TDto> GetByIdAsync(int id)
+        public async Task<TDto> GetByIdAsync(string id)
         {
             var entity = await _unitOfWork.GetRepository<TEntity>().GetByIdAsync(id);
             return _unitOfWork.Mapper.Map<TDto>(entity);

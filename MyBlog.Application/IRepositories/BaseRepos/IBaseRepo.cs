@@ -9,7 +9,7 @@ namespace MyBlog.Application.IRepositories.BaseRepos
 {
     public interface IBaseRepo<T> where T : IBaseEntity
     {
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(string id);
 
         Task<List<T>> GetAllAsync();
 

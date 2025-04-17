@@ -10,7 +10,7 @@ namespace MyBlog.Application.Services.IServices
 {
     public interface IBaseService<TDto, TEntity> where TDto : IBaseEntityDTO where TEntity : IBaseEntity
     {
-        Task<TDto> GetByIdAsync(int id);
+        Task<TDto> GetByIdAsync(string id);
         Task<List<TDto>> GetAllAsync();
         int Create(TDto tDto);
         int Update(TDto tDto);

@@ -15,5 +15,14 @@ namespace MyBlog.Application.Services
         public ArticleService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+        public async Task IncreaseViewCountAsync(string id)
+        {
+            
+            var article = await _unitOfWork.GetRepository<Article>().GetByIdAsync(id);
+            article.ViewCount++;
+            await _unitOfWork.SaveChangesAsync();
+
+        }
     }
 }

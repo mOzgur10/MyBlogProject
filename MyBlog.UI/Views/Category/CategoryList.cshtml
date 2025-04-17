@@ -1,0 +1,63 @@
+﻿@model IEnumerable<MyBlog.UI.Models.VMs.CategoryVM> 
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Kategori Listesi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Kategori Listesi</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody id="categories">
+            </tbody>
+        </table>
+        <div><button id="btn-add-category" class="btn btn-primary">Yeni Kategori Ekle</button></div>
+    </div>
+</body>
+</html>
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        console.log("Document Loaded");
+        verileriGetir();
+    });
+    function verileriGetir() {
+        console.log("OK!");
+        $.ajax({
+            url: '/Category/CategoryList',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var tbody = $('#categories');
+                console.log(data);
+                tbody.empty();
+                $.each(data, function (i, item) {
+                    var satir = '<tr data-id="' + item.id + '">' +
+                        '<td class="category-name">' + item.name + '</td>' +
+                        '<td>' +
+                        '<button class="btn-edit">Edit</button>' +
+                        '<button class="btn-save d-none">Save</button>' +
+                        '<button class="btn-cancel d-none">Cancel</button>' +
+                        '</td>' +
+                        '</tr>';
+                    tbody.append(satir);
+                });
+            },
+            error: function () {
+                alert("Veriler alınamadı.");
+            }
+        });
+    }
+</script>
+}

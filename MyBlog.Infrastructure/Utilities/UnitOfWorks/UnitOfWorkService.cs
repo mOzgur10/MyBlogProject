@@ -28,5 +28,10 @@ namespace MyBlog.Infrastructure.Utilities.UnitOfWorks
         public ICategoryService CategoryService { get; }
 
         public ICommentService CommentService { get; }
+
+        public async Task<int> CommitChangesAsync()
+        {
+            return await _unitOfWork.SaveChangesAsync();
+        }
     }
 }
