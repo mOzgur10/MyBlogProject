@@ -1,24 +1,59 @@
 ﻿@model MyBlog.UI.Models.VMs.AppUserVM
 
+
+@using System.Security.Claims
+@using MyBlog.UI.Models.VMs
+
 @{
-    ViewData["Title"] = "UserProfile";
+    ViewData["Title"] = "Kullanıcı Profili";
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var isAdmin = User.IsInRole("Admin");
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <h2 class="text-start">@Model.UserName</h2>
+        </div>
+    </div>
+    <div class="row">
+        <!-- Article list -->
+        <div class="col-md-8">
+            <div id="user-articles">
+                <p>Yükleniyor...</p>
+            </div>
+        </div>
+
+        <!-- Profile card -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="text-center">
+                    <img src="@Model.ImageUrl" class="rounded-circle shadow mb-3" style="width: 120px; height: 120px; object-fit: cover;" alt="Profil Fotoğrafı">
+                    <h5 class="mb-1">@Model.UserName</h5>
+                    <p class="text-muted small mb-2">@Model.Email</p>
+                    <p class="text-secondary">@Model.AboutMe</p>
+                    @if (currentUserId == Model.Id || isAdmin)
+{
+                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal_@Model.Id">Profili Düzenle</button>
+}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@await Html.PartialAsync("~/Views/Shared/PartialViews/_EditProfileModal.cshtml", Model)
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.get('/Article/ArticleList', { userId: '@Model.Id' }, function (data) {
+                $('#user-articles').html(data);
+            });
+        });
+    </script>
 }
 
-<h1>UserProfile</h1>
 
-<div>
-    <h4>AppUserVM</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>

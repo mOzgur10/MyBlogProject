@@ -1,0 +1,95 @@
+﻿@model MyBlog.UI.Models.VMs.ArticleCreateVM
+
+@{
+    ViewData["Title"] = "Create Article";
+}
+
+<h1 class="mb-4">Create Article</h1>
+
+<h4 class="mb-3">Fill out the form to create a new article</h4>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="CreateArticle" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Title Field -->
+            <div class="mb-3">
+                <label for="Title" class="form-label">Title</label>
+                <input asp-for="Title" class="form-control form-control-lg" id="Title" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <!-- Description Field -->
+            <div class="mb-3">
+                <label for="Description" class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control form-control-lg" id="Description" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- Content Field -->
+            <div class="mb-3">
+                <label for="Content" class="form-label">Content</label>
+                <textarea asp-for="Content" class="form-control form-control-lg" id="Content" rows="6"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <!-- Category Field -->
+            <div class="mb-3">
+                <label for="CategoryId" class="form-label">Category</label>
+                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select form-select-lg" id="CategoryId">
+                    <option value="">Select a Category</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <!-- Image Upload Field -->
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload Image</label>
+                <input type="file" name="image" class="form-control form-control-lg" id="image" accept="image/*" />
+                <div id="image-preview" class="mt-3" style="display: none;">
+                    <img id="preview-image" src="" alt="Preview" class="img-fluid rounded" />
+                </div>
+                
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mb-3">
+                <input type="submit" value="Create Article" class="btn btn-primary btn-lg" />
+            </div>
+        </form>
+    </div>
+
+    
+    
+</div>
+
+<hr />
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-link">Back to Article List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Preview image before upload
+        document.getElementById("image").addEventListener("change", function (event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById("preview-image").src = e.target.result;
+                document.getElementById("image-preview").style.display = 'block';
+            };
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}
+

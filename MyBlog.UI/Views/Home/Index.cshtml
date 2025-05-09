@@ -1,17 +1,58 @@
-﻿@{
+﻿@model IEnumerable<MyBlog.UI.Models.VMs.CategoryVM>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
 <div>
-    @if (User.Identity.IsAuthenticated){
-
-    <h3>ıdentityname @User.Identity.Name</h3>  <!-- Kullanıcı adı veya e-posta -->
-    <h3>value @User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value</h3>  <!-- Kullanıcı ID'si -->
-    }
+    <div class="container mt-4">
+        
+            <div class="d-flex justify-content-center overflow-auto gap-2 py-2 px-1">
+            <button class="btn btn-outline-secondary  category-btn"
+                    onclick="loadArticlesByCategory('', this)">
+                All Articles
+            </button>
+            @foreach (var item in Model)
+            {
+                <button class="btn btn-outline-secondary  category-btn"
+                        onclick="loadArticlesByCategory('@item.Id', this)">
+                    @item.Name
+                </button>
+            }
+            </div>
+        <div class="col-md-9" id="main-content">
+            <!-- Dinamik içerik burada yüklenecek -->
+        </div>
+        
+    </div>
     
 </div>
+@section Scripts {
+    <script>
+                $(document).ready(function () {
+            $('.category-btn').first().trigger('click');
+        });
+        function loadArticlesByCategory(categoryId,button) {
+            $.ajax({
+                url: '/Article/ArticleList',
+                type: 'GET',
+                data: { categoryId: categoryId },
+                success: function (html) {
+                    $('#main-content').html(html);
+                   $('.category-btn')
+                .removeClass('btn-secondary active')
+                .addClass('btn-outline-secondary');
+
+            
+            $(button)
+                .removeClass('btn-outline-secondary')
+                .addClass('btn-secondary active');
+
+                },
+                error: function () {
+                    $('#main-content').html('<p>Makaleler yüklenemedi.</p>');
+                }
+            });
+        }
+    </script>
+}

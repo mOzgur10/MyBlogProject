@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MyBlog.Application.IRepositories;
 using MyBlog.Application.Mappers;
 using MyBlog.Application.Services;
@@ -15,10 +16,22 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDistributedMemoryCache(); // Session için gerekli altyapý
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60); // Oturum süresi
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddAutoMapper(typeof(Mapping));
 
 //Contexts
-builder.Services.AddDbContext<AppDbContext>();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("defaultconn")));
+
+//builder.Services.AddDbContext<AppDbContext>(); bu satýr kaldýrýldý!!!
 builder.Services.AddIdentity<AppUser,IdentityRole>(options =>
 {
     options.Password.RequiredLength = 3;
@@ -71,7 +84,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+
+
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

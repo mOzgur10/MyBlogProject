@@ -1,0 +1,108 @@
+﻿@using MyBlog.UI.Models.VMs
+@model IEnumerable<MyBlog.UI.Models.VMs.AppUserVM>
+
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>App Users</h4>
+        <a asp-action="Create" class="btn btn-success">Create New</a>
+    </div>
+
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Email</th>
+                <th>UserName</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var index = 1;
+            }
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@user.Email</td>
+                    <td>@user.UserName</td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-primary me-2 open-edit-modal"
+                                data-user-id="@user.Id"
+                                data-username="@user.UserName"
+                                data-email="@user.Email"
+                                data-aboutme="@user.AboutMe"
+                                data-imageurl="@user.ImageUrl"
+                                data-bs-toggle="modal" data-bs-target="#editProfileModal_@user.Id">
+                            Edit
+                        </button>
+                        <a asp-action="UserProfile" asp-route-id="@user.Id" class="btn btn-sm btn-info me-2">Details</a>
+                        <a asp-action="DeleteUser" asp-route-id="@user.Id" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+               
+                index++;
+            }
+        </tbody>
+    </table>
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Kullanıcıyı Sil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bu kullanıcıyı silmek istediğinize emin misiniz?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <!-- Silme işlemi AJAX ile yapılacak -->
+                    <button type="button" class="btn btn-danger" id="deleteButton">Sil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @foreach (var user in Model)
+    {
+        @await Html.PartialAsync("~/Views/Shared/PartialViews/_EditProfileModal.cshtml", user)
+    }
+</div>
+<script>
+    // Silme butonuna tıklandığında ilgili kullanıcının ID'sini al
+    $('#deleteModal').on('show.bs.modal', function (e) {
+        var button = $(e.relatedTarget); // Modalı tetikleyen buton
+        var userId = button.data('user-id'); // Butondan userId'yi al
+
+        // Modalın içinde bir input veya başka bir elemente bu userId'yi set edebiliriz.
+        $('#confirmDeleteBtn').data('user-id', userId);
+    });
+
+    // Silme onayı verildiğinde AJAX ile silme işlemi
+    $('#confirmDeleteBtn').on('click', function () {
+        var userId = $(this).data('user-id'); // UserId'yi al
+
+        // AJAX ile Delete isteği gönder
+        $.ajax({
+            url: '/AppUser/DeleteUser',  // Silme işleminin yapılacağı URL
+            type: 'POST',
+            data: { id: userId },  // Gönderilecek data (id)
+            success: function (response) {
+                // Silme işlemi başarılıysa modalı kapat ve sayfayı güncelle
+                $('#deleteModal').modal('hide');
+                location.reload();  // Sayfayı yenileyerek listeyi güncelle
+            },
+            error: function () {
+                alert('Bir hata oluştu, lütfen tekrar deneyin.');
+            }
+        });
+    });
+</script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+

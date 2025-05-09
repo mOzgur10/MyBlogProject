@@ -35,7 +35,7 @@ namespace MyBlog.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new AppUser() { Email = model.Email, UserName = model.Email };
+                var user = new AppUser() { Email = model.Email, UserName = model.Email.Split('@')[0] };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -61,8 +61,9 @@ namespace MyBlog.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                var user = _userManager.GetUserAsync(User);
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
@@ -78,8 +79,6 @@ namespace MyBlog.UI.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-
-
 
     }
 }

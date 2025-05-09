@@ -33,5 +33,9 @@ namespace MyBlog.Core.CoreEntities.Entities
         public virtual ICollection<Article> Articles { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public string? AboutMe { get; set; }
     }
 }

@@ -1,21 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyBlog.Application.Utilities.IUnitOfWorks;
+
 using MyBlog.UI.Models;
+using MyBlog.UI.Models.VMs;
 using System.Diagnostics;
 
 namespace MyBlog.UI.Controllers
 {
-    public class HomeController : Controller
+    
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
+        
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWorkService unitOfWork) :base(unitOfWork)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+       [HttpGet]
+        public async Task <IActionResult> Index()
         {
-            return View();
+            var categories = await _unitOfWork.CategoryService.GetAllAsync();
+            var categoriesVM = new List<CategoryVM>();
+            foreach (var category in categories)
+            {
+                var categoryVM = new CategoryVM { Name = category.Name, Id = category.Id };
+                categoriesVM.Add(categoryVM);
+            }
+
+            return View(categoriesVM);
         }
 
         public IActionResult Privacy()

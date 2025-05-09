@@ -21,8 +21,7 @@ namespace MyBlog.Application.Services
             
             var article = await _unitOfWork.GetRepository<Article>().GetByIdAsync(id);
             article.ViewCount++;
-            await _unitOfWork.SaveChangesAsync();
-
+            
         }
     }
 }

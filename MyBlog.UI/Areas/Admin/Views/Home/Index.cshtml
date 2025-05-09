@@ -13,10 +13,10 @@
                     <a class="nav-link" href="javascript:void(0);" onclick="loadPartialView('/Category/CategoryList')">Kategoriler</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);" onclick="loadPartialView('/Admin/Home/LoadUserList')">Kullanıcılar</a>
+                    <a class="nav-link" href="javascript:void(0);" onclick="loadPartialView('/AppUser/AppUserList')">Kullanıcılar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);" onclick="loadPartialView('/Admin/Home/LoadArticleList')">Makaleler</a>
+                    <a class="nav-link" href="javascript:void(0);" onclick="loadPartialView('/Article/ArticleList')">Makaleler</a>
                 </li>
             </ul>
         </div>
@@ -31,7 +31,12 @@
 @section Scripts {
     <script>
 
-
+        $(document).ready(function () {
+            var loadPartial = '@ViewBag.LoadPartial';
+            if (loadPartial) {
+                loadPartialView(loadPartial);
+            }
+        });
 
 
         function loadPartialView(url) {
@@ -46,5 +51,8 @@
                 }
             });
         }
+
+
+
     </script>
 }

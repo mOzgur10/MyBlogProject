@@ -15,5 +15,10 @@ namespace MyBlog.Application.Services
         public AppUserService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+        public async Task<string> GetImageUrlById(string id)
+        {
+            return "";
+        }
     }
 }

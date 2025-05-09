@@ -19,11 +19,7 @@ namespace MyBlog.Infrastructure.Contexts
         public DbSet<Article> Articles { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-E8OU015\\SQLEXPRESS;Database=DenemeBlog2;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=True;TrustServerCertificate=True");
-            base.OnConfiguring(optionsBuilder);
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -52,21 +52,21 @@ namespace MyBlog.Infrastructure.Migrations
                         new
                         {
                             Id = "cf0c57f4-f011-4d8a-bc5b-d5cb3d4188fc",
-                            ConcurrencyStamp = "c983c46a-2676-4b2b-8761-2982e61d43a1",
+                            ConcurrencyStamp = "59631fc4-e11f-42ed-ae00-07c5d18f1891",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "558b5f08-f36d-401f-9908-e472e74c3469",
-                            ConcurrencyStamp = "60f83a0e-0023-4350-adab-add1f4f584ea",
+                            ConcurrencyStamp = "601b66f6-ad4d-42e1-8352-14a36b823e75",
                             Name = "Editor",
                             NormalizedName = "EDITOR"
                         },
                         new
                         {
                             Id = "b42ccf3b-987c-4d9e-a5f6-5be02e62cb29",
-                            ConcurrencyStamp = "f8bd5fc3-48ca-462f-834d-33df17c51ae1",
+                            ConcurrencyStamp = "780fd21d-241f-4f98-8cfc-2fbc8ad6678a",
                             Name = "Writer",
                             NormalizedName = "WRITER"
                         });
@@ -190,6 +190,9 @@ namespace MyBlog.Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AboutMe")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
@@ -209,6 +212,9 @@ namespace MyBlog.Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -266,16 +272,16 @@ namespace MyBlog.Infrastructure.Migrations
                         {
                             Id = "c0f8b9e0-9d45-4b2a-bfa3-1a2bb8b5d001",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ed5265d9-c684-4d43-b2e0-38f2609451f4",
-                            CreateDate = new DateTime(2025, 4, 9, 21, 16, 38, 968, DateTimeKind.Local).AddTicks(5729),
+                            ConcurrencyStamp = "da5a458d-0287-480a-a226-b812f6a3947d",
+                            CreateDate = new DateTime(2025, 5, 9, 10, 2, 30, 81, DateTimeKind.Local).AddTicks(2357),
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAJapzrFq7N8rOyTpjkYi06UKU3xUwWPveJO5gIWD/r8jzFq4yNIWx3n3n3Wexyu1A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHbtPzzPR2yYmQyDJr/juNB8zlwvGOEiYQ9U6R54nGKpB9zOAq+xSXYT6+nLc1NhHQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "11829c69-222a-445e-82e5-cdbd86d2d536",
+                            SecurityStamp = "77657ce2-46d5-470b-a339-45c9745ae919",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"
@@ -304,6 +310,13 @@ namespace MyBlog.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("LikeCount")
                         .HasColumnType("int");

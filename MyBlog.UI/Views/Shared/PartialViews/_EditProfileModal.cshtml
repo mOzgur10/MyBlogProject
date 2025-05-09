@@ -1,0 +1,39 @@
+﻿@model MyBlog.UI.Models.VMs.AppUserVM
+
+<div class="modal fade" id="editProfileModal_@Model.Id" tabindex="-1" aria-labelledby="editProfileModalLabel_@Model.Id" aria-hidden="true">
+    <div class="modal-dialog">
+        
+        <div class="modal-content shadow">
+            <form asp-action="UpdateUser" asp-controller="AppUser" method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <div>Modal İçin Kullanıcı: @(Model?.UserName ?? "MODEL NULL!")</div>
+                    <h5 class="modal-title" id="editProfileModalLabel">Profili Düzenle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label for="UserName" class="form-label">Kullanıcı Adı</label>
+                        <input type="text" class="form-control" name="UserName" value="@Model.UserName" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="Email" value="@Model.Email" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="AboutMe" class="form-label">Hakkımda</label>
+                        <textarea class="form-control" name="AboutMe" rows="3">@Model.AboutMe</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Image" class="form-label">Profil Fotoğrafı</label>
+                        <input type="file" class="form-control" name="image" accept="image/*" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

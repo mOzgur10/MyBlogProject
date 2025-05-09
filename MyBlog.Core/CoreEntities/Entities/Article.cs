@@ -21,6 +21,9 @@ namespace MyBlog.Core.CoreEntities.Entities
 
         public Category Category { get; set; }
         public string CategoryId { get; set; }
+        public string? ImageUrl { get; set; }
+
+        public string Description { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
         public int ViewCount { get; set; } = 0;

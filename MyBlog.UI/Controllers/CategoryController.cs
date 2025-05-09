@@ -7,12 +7,12 @@ using MyBlog.UI.Models.VMs;
 
 namespace MyBlog.UI.Controllers
 {
-    public class CategoryController : Controller
+    public class CategoryController : BaseController
     {
-        private readonly IUnitOfWorkService _unitOfWork;
-        public CategoryController(IUnitOfWorkService unitOfWork)
+        
+        public CategoryController(IUnitOfWorkService unitOfWork):base(unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            
         }
         public IActionResult Index()
         {
@@ -25,33 +25,31 @@ namespace MyBlog.UI.Controllers
         {
             var categoriesDTO = await _unitOfWork.CategoryService.GetAllAsync();
 
-            //var categories = new List<CategoryVM>();
 
-            //foreach (var category in categoriesDTO)
-            //{
-            //    var categoryVM = new CategoryVM
-            //    {
-            //        Id = category.Id,
-            //        Name = category.Name
-            //    };
+            var categories = new List<CategoryVM>();
 
-            //    categories.Add(categoryVM);
-            //}
+            foreach (var category in categoriesDTO)
+            {
+                var categoryVM = new CategoryVM
+                {
+                    Id= category.Id,
+                    Name = category.Name
+                };
 
-            //return View(categories);
-            return Json(categoriesDTO);
+                categories.Add(categoryVM);
+            }
+
+            return PartialView(categories);
         }
 
         [HttpPost]
-        public IActionResult UpdateInline(string Id, string name)
+        public async Task<IActionResult> UpdateCategory(string Id, string name)
         {
             var dto = new CategoryDTO { Id = Id, Name = name };
-            int result = _unitOfWork.CategoryService.Update(dto);
+            _unitOfWork.CategoryService.Update(dto);
+            await _unitOfWork.CommitChangesAsync();
 
-            if (result > 0)
-                return Ok();
-            else
-                return BadRequest("Güncelleme başarısız.");
+            return RedirectToAction("Index", "Admin", new { area = "Admin", loadPartial = "/Category/CategoryList" });
         }
         
 
@@ -63,24 +61,32 @@ namespace MyBlog.UI.Controllers
 
 
         [HttpPost]
-        public IActionResult CreateCategory(string name)
+        public async Task<IActionResult> CreateCategory(string name)
             {
                 
                     var category = new CategoryDTO()
                     {
                         Name = name,
-                        Id =Guid.NewGuid().ToString()
+                        Id =Guid.NewGuid().ToString()//??????
                     };
 
                     
-            var result = _unitOfWork.CategoryService.Create(category);
+            await _unitOfWork.CategoryService.CreateAsync(category);
+            await _unitOfWork.CommitChangesAsync();
 
-            if (result > 0)
-                return Ok();
-            else
-                return BadRequest("Güncelleme başarısız.");
-            }
+            return RedirectToAction("Index", "Admin", new { area = "Admin", loadPartial = "/Category/CategoryList" });
+        }
 
-        
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(string Id)
+        {
+            await _unitOfWork.CategoryService.DeleteAsync(Id);
+            await _unitOfWork.CommitChangesAsync();
+            return RedirectToAction("Index", "Admin", new { area = "Admin", loadPartial = "/Category/CategoryList" });
+        }
+
+
+
+
     }
 }
