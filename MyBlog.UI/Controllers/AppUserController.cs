@@ -15,12 +15,14 @@ namespace MyBlog.UI.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AppUserController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IUnitOfWorkService unitOfWork ):base(unitOfWork)
+
+        public AppUserController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IUnitOfWorkService unitOfWork, RoleManager<IdentityRole> roleManager) :base(unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             
 
         }
@@ -77,23 +79,14 @@ namespace MyBlog.UI.Controllers
             var usersVM = new List<AppUserVM>();
             foreach (var user in users)
             {
-                usersVM.Add( new AppUserVM() {  Email = user.Email, Id=user.Id, UserName=user.UserName, AboutMe=user.AboutMe, ImageUrl=user.ImageUrl });
+                var roles = await _userManager.GetRolesAsync(user);
+                var role = roles.FirstOrDefault();
+                usersVM.Add( new AppUserVM() {  Email = user.Email, Id=user.Id, UserName=user.UserName, AboutMe=user.AboutMe, ImageUrl=user.ImageUrl, Role=role });
             }
             return PartialView(usersVM);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SaveProfilePhoto(IFormFile image)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (image != null && image.Length > 0)
-            {
-                user.ImageUrl = await ImageHelper.SaveImageWithThumbnailAsync(image, "user");
-                await _userManager.UpdateAsync(user);
-            }
-           
-            return RedirectToAction("UserProfile", "AppUser");
-        }
+        
 
         [HttpPost]
         public async Task<IActionResult> UpdateUser(AppUserEditVM model, IFormFile image)
@@ -109,9 +102,9 @@ namespace MyBlog.UI.Controllers
                     user.ImageUrl = await ImageHelper.SaveImageWithThumbnailAsync(image, "user");
 
                 }
-
+                await _userManager.UpdateAsync(user);
             }
-            await _userManager.UpdateAsync(user);
+            
             return RedirectToAction("UserProfile", "AppUser", new { id = user.Id });
 
         }
@@ -120,8 +113,54 @@ namespace MyBlog.UI.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
             user.Status = EntityStatus.Deleted;
+
+            var articles = await _unitOfWork.ArticleService.GetAllAsync(x => x.AppUserId == id);
+            foreach (var article in articles)
+            {
+                await _unitOfWork.ArticleService.DeleteAsync(article.Id);
+            }
+
             await _unitOfWork.CommitChangesAsync();
             return Ok();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRolesForAssign()
+        {
+            var roles = await _roleManager.Roles.Select(x => x.Name).ToListAsync();
+            return Json(roles);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRole(string userId, string role)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Any())
+            {
+                await _userManager.RemoveFromRolesAsync(user, roles);
+            }
+            if (user != null)
+            {
+                await _userManager.AddToRoleAsync(user, role);
+            }
+
+            return Ok();
+        }
+        [HttpGet]
+        public async Task<IActionResult>  GetUserCard(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId); 
+            var model = new AppUserVM()
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                ImageUrl = ImageHelper.GetThumbnailUrl(user.ImageUrl),
+                Id = user.Id,
+                AboutMe = user.AboutMe
+            };
+            return PartialView("UserCard", model);
+        }
+
     }
 }

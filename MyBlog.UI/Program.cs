@@ -4,11 +4,13 @@ using MyBlog.Application.IRepositories;
 using MyBlog.Application.Mappers;
 using MyBlog.Application.Services;
 using MyBlog.Application.Services.IServices;
+using MyBlog.Application.Utilities.IEmailServices;
 using MyBlog.Application.Utilities.IUnitOfWorks;
 using MyBlog.Core.CoreEntities.Entities;
 using MyBlog.Infrastructure.Contexts;
-using MyBlog.Infrastructure.DataSeeders;
+
 using MyBlog.Infrastructure.Repositories;
+using MyBlog.Infrastructure.Utilities.EmailServices;
 using MyBlog.Infrastructure.Utilities.UnitOfWorks;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,10 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDistributedMemoryCache(); // Session için gerekli altyapý
+builder.Services.AddDistributedMemoryCache(); 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(60); // Oturum süresi
+    options.IdleTimeout = TimeSpan.FromMinutes(60); 
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -31,7 +33,8 @@ builder.Services.AddAutoMapper(typeof(Mapping));
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("defaultconn")));
 
-//builder.Services.AddDbContext<AppDbContext>(); bu satýr kaldýrýldý!!!
+var requireConfirmedEmail = builder.Configuration.GetValue<bool>("EmailSettings:UseEmailService");
+Console.WriteLine(requireConfirmedEmail);
 builder.Services.AddIdentity<AppUser,IdentityRole>(options =>
 {
     options.Password.RequiredLength = 3;
@@ -41,12 +44,13 @@ builder.Services.AddIdentity<AppUser,IdentityRole>(options =>
     options.Password.RequireDigit = false;
    
     options.User.RequireUniqueEmail = true;
-    options.SignIn.RequireConfirmedEmail = false;  
+    options.SignIn.RequireConfirmedEmail = requireConfirmedEmail;  
     options.SignIn.RequireConfirmedPhoneNumber = false;
 
     
 }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAppUserRepo, AppUserRepo>();
@@ -57,7 +61,7 @@ builder.Services.AddScoped<IAppUserService, AppUserService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
-//builder.Services.AddScoped<IAppUserRepo, AppUserRepo>();
+
 
 
 builder.Services.ConfigureApplicationCookie(options =>

@@ -4,42 +4,37 @@
     ViewData["Title"] = "Update Article";
 }
 
-<h1 class="mb-4">Update Article</h1>
-
-<h4 class="mb-3">Update the details of the article</h4>
+<h2 class="mb-4 text-center">Update Article</h2>
 
 <hr />
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12 mx-auto">
         <form asp-action="UpdateArticle" asp-route-id="@Model.Id" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="AppUserId" />
             <input type="hidden" asp-for="CreateDate" />
             <input type="hidden" asp-for="ImageUrl" />
-            <!-- Title Field -->
+            
             <div class="mb-3">
                 <label for="Title" class="form-label">Title</label>
                 <input asp-for="Title" class="form-control form-control-lg" id="Title" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
-            <!-- Description Field -->
             <div class="mb-3">
                 <label for="Description" class="form-label">Description</label>
                 <textarea asp-for="Description" class="form-control form-control-lg" id="Description" rows="3"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <!-- Content Field -->
             <div class="mb-3">
                 <label for="Content" class="form-label">Content</label>
                 <textarea asp-for="Content" class="form-control form-control-lg" id="Content" rows="6"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
 
-            <!-- Category Field -->
             <div class="mb-3">
                 <label for="CategoryId" class="form-label">Category</label>
                 <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select form-select-lg" id="CategoryId">
@@ -48,7 +43,6 @@
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
 
-            <!-- Image Upload Field -->
             <div class="mb-3">
                 <label for="image" class="form-label">Upload Image (Optional)</label>
                 <input type="file" name="image" class="form-control form-control-lg" id="image" accept="image/*" />
@@ -65,7 +59,6 @@
                 }
             </div>
 
-            <!-- Submit Button -->
             <div class="mb-3">
                 <input type="submit" value="Update Article" class="btn btn-primary btn-lg" />
             </div>
@@ -76,7 +69,7 @@
 <hr />
 
 <div class="mt-4">
-    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-link">Back to Article Details</a>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-link">Back to Article</a>
 </div>
 
 @section Scripts {
@@ -85,7 +78,7 @@
     }
 
     <script>
-        // Preview image before upload
+        
         document.getElementById("image").addEventListener("change", function (event) {
             var file = event.target.files[0];
             var reader = new FileReader();

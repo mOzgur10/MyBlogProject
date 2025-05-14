@@ -18,10 +18,11 @@ namespace MyBlog.Application.Services
 
         public async Task IncreaseViewCountAsync(string id)
         {
-            
-            var article = await _unitOfWork.GetRepository<Article>().GetByIdAsync(id);
-            article.ViewCount++;
-            
+            if (!string.IsNullOrEmpty(id))
+            {
+                var article = await _unitOfWork.GetRepository<Article>().GetByIdAsync(id);
+                article.ViewCount++;
+            }
         }
     }
 }

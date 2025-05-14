@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MyBlog.UI.Models.VMs.ArticleVM>
+
+<div class="container my-4">
+    <div class="row row-cols-1 g-4">
+        @foreach (var article in Model)
+        {
+            <div class="col">
+                <div class="card border-0 shadow-sm h-100 mb-3">
+
+                    <div class="card-body">
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            @if (!string.IsNullOrEmpty(article.AppUserImage))
+                            {
+                                <img src="@article.AppUserImage" alt="User Image" class="rounded-circle" style="width: 25px; height: 25px; object-fit: cover;">
+                            }
+                            <span class="ms-2 text-dark" style="font-size: 1rem; font-weight: 500;">@article.AppUserName</span>
+                        </div>
+
+                        
+                        <a asp-controller="Article" asp-action="Details" asp-route-id="@article.Id" class="text-decoration-none text-dark">
+                            <h5 class="mb-2" style="color: #333;">@article.Title</h5>
+                        </a>
+
+                        <div class="text-muted small mt-2">
+                            <span>@article.Date</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

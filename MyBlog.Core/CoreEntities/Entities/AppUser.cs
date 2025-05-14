@@ -12,13 +12,7 @@ namespace MyBlog.Core.CoreEntities.Entities
 {
     public class AppUser : IdentityUser , IBaseEntity
     {
-        //public string FirstName { get; set; }
-        //public string  LastName { get; set; }
-
-        //[NotMapped]
-        //public string FullName { get { return FirstName + " " + LastName; } }
-
-        //public string Id { get; set; } 
+        
         public AppUser()
         {
             Articles = new List<Article>();

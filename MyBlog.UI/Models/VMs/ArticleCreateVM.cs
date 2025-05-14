@@ -13,10 +13,11 @@ namespace MyBlog.UI.Models.VMs
         public string Title { get; set; }
         public string Content { get; set; }
 
-        [Required(ErrorMessage = "Lütfen bir kategori seçiniz.")]
+        [Required(ErrorMessage = "Please select a category")]
         public string CategoryId { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }
-        
+
+        [Required(ErrorMessage = "Please upload a photo for article.")]
         public string ImageUrl { get; set; }
         public string Description { get; set; }
 

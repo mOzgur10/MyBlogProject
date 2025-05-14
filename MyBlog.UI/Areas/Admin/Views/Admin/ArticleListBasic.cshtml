@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MyBlog.UI.Areas.Admin.Models.ArticleListVM>
+
+<table class="table table-bordered table-striped align-middle" id="categoryTable">
+    <thead class="table-light">
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th class="text-end">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var index = 1;
+        }
+        @foreach (var article in Model)
+        {
+            <tr>
+                <td>@index</td>
+                <td>@article.Title</td>
+                <td>@article.CategoryName</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-warning  me-2"
+                       asp-area=""
+                       asp-controller="Article"
+                       asp-action="UpdateArticle"
+                       asp-route-id="@article.Id">
+                        Edit
+                    </a>
+                    <button class="btn btn-sm btn-danger deleteArticleBtn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteArticleModal"
+                       data-id="@article.Id">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            index++;
+        }
+    </tbody>
+</table>

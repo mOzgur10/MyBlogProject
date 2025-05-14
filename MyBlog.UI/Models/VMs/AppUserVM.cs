@@ -18,5 +18,6 @@ namespace MyBlog.UI.Models.VMs
         public string UserName { get; set; }
 
         public string AboutMe { get; set; }
+        public string Role { get; set; }
     }
 }

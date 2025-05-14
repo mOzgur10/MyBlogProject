@@ -52,21 +52,21 @@ namespace MyBlog.Infrastructure.Migrations
                         new
                         {
                             Id = "cf0c57f4-f011-4d8a-bc5b-d5cb3d4188fc",
-                            ConcurrencyStamp = "59631fc4-e11f-42ed-ae00-07c5d18f1891",
+                            ConcurrencyStamp = "39ce326f-ae8c-475d-9541-9c29c663c748",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "558b5f08-f36d-401f-9908-e472e74c3469",
-                            ConcurrencyStamp = "601b66f6-ad4d-42e1-8352-14a36b823e75",
+                            ConcurrencyStamp = "eb57ff75-bddc-4e66-bd17-f9f2fb4bffc0",
                             Name = "Editor",
                             NormalizedName = "EDITOR"
                         },
                         new
                         {
                             Id = "b42ccf3b-987c-4d9e-a5f6-5be02e62cb29",
-                            ConcurrencyStamp = "780fd21d-241f-4f98-8cfc-2fbc8ad6678a",
+                            ConcurrencyStamp = "117ac9db-fa03-41e0-986d-420f0ce0bef0",
                             Name = "Writer",
                             NormalizedName = "WRITER"
                         });
@@ -272,16 +272,17 @@ namespace MyBlog.Infrastructure.Migrations
                         {
                             Id = "c0f8b9e0-9d45-4b2a-bfa3-1a2bb8b5d001",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "da5a458d-0287-480a-a226-b812f6a3947d",
-                            CreateDate = new DateTime(2025, 5, 9, 10, 2, 30, 81, DateTimeKind.Local).AddTicks(2357),
+                            ConcurrencyStamp = "068be76f-f1c2-44dd-a874-000b534c0009",
+                            CreateDate = new DateTime(2025, 5, 13, 15, 55, 21, 327, DateTimeKind.Local).AddTicks(1240),
                             Email = "admin@example.com",
                             EmailConfirmed = true,
+                            ImageUrl = "/images/user/default-profile-photo.jpg",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHbtPzzPR2yYmQyDJr/juNB8zlwvGOEiYQ9U6R54nGKpB9zOAq+xSXYT6+nLc1NhHQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJeq3Bcjcv4IKvhTkujJUH/Osr55S0nTF8/9WE4+q68fbKv+OMnjd96PWa2q4axOcg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "77657ce2-46d5-470b-a339-45c9745ae919",
+                            SecurityStamp = "c7abde34-5260-4348-bad1-9c64179233b9",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"

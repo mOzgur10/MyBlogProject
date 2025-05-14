@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<MyBlog.UI.Models.VMs.CategoryVM>
 
-<table class="table table-bordered table-striped align-middle">
+<table class="table table-bordered table-striped align-middle" id="categoryTable">
     <thead class="table-light">
         <tr>
             <th>#</th>
@@ -18,7 +18,7 @@
                 <td>@index</td>
                 <td>@category.Name</td>
                 <td class="text-end">
-                    <button class="btn btn-sm btn-warning editBtn me-2"
+                    <button class="btn btn-sm btn-warning editCategoryBtn me-2"
                             data-bs-toggle="modal"
                             data-bs-target="#editCategoryModal"
                             data-id="@category.Id"
@@ -26,7 +26,7 @@
                         Edit
                     </button>
 
-                    <button class="btn btn-sm btn-danger deleteBtn"
+                    <button class="btn btn-sm btn-danger deleteCategoryBtn"
                             data-bs-toggle="modal"
                             data-bs-target="#deleteCategoryModal"
                             data-id="@category.Id"
@@ -46,95 +46,3 @@
     </button>
 </div>
 
-<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form id="editCategoryForm" asp-action="UpdateCategory" method="post">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="Id" id="editCategoryId" />
-                    <div class="mb-3">
-                        <label for="editCategoryName" class="form-label">Category Name</label>
-                        <input type="text" class="form-control" name="Name" id="editCategoryName" required />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form id="deleteCategoryForm" asp-action="DeleteCategory" method="post">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteCategoryModalLabel">Confirm Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete category <strong id="deleteCategoryName"></strong>?</p>
-                    <input type="hidden" name="Id" id="deleteCategoryId" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form asp-action="CreateCategory" method="post">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createCategoryModalLabel">Add New Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="createCategoryName" class="form-label">Category Name</label>
-                        <input type="text" class="form-control" name="Name" id="createCategoryName" required />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-             $(document).ready(function () {
-            
-            $('.deleteBtn').on('click', function () {
-                var id = $(this).data('id');
-                var name = $(this).data('name');
-
-                $('#deleteCategoryId').val(id);
-                $('#deleteCategoryName').text(name);
-
-            });
-
-        $('.editBtn').on('click', function () {
-            var id = $(this).data('id');
-            var name = $(this).data('name');
-
-            $('#editCategoryId').val(id);
-            $('#editCategoryName').val(name);
-        });
-           
-        });
-    </script>

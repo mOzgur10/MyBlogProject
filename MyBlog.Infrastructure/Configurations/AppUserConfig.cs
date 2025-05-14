@@ -27,6 +27,7 @@ namespace MyBlog.Infrastructure.Configurations
                 Email = "admin@example.com",
                 NormalizedEmail = "ADMIN@EXAMPLE.COM",
                 EmailConfirmed = true,
+                ImageUrl = "/images/user/default-profile-photo.jpg",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 

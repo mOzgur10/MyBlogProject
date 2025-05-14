@@ -84,11 +84,11 @@ namespace MyBlog.UI.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            //if (user == null)
-            //    return Unauthorized(); 
+            
 
             var articleDTO = new ArticleDTO()
             {
+                Id = Guid.NewGuid().ToString(),
                 Content = article.Content,
                 Title = article.Title,
                 CategoryId = article.CategoryId,
@@ -100,7 +100,7 @@ namespace MyBlog.UI.Controllers
             await _unitOfWork.ArticleService.CreateAsync(articleDTO);
             await _unitOfWork.CommitChangesAsync();
 
-            return Ok();
+            return RedirectToAction("Details", "Article", new { id = articleDTO.Id });
         }
 
         [HttpPost]
@@ -108,8 +108,9 @@ namespace MyBlog.UI.Controllers
         {
             await _unitOfWork.ArticleService.DeleteAsync(id);
             await _unitOfWork.CommitChangesAsync();
-            return RedirectToAction("Index", "Home");
+            return Ok();
         }
+
 
         [HttpGet]
         public async Task<IActionResult> UpdateArticle(string id)
@@ -126,7 +127,7 @@ namespace MyBlog.UI.Controllers
                 Description = articleDto.Description,
                 ImageUrl = articleDto.ImageUrl,
                 Id = id,
-                Categories= categoryDtos.Select(c => new SelectListItem
+                Categories = categoryDtos.Select(c => new SelectListItem
                 {
                     Value = c.Id,
                     Text = c.Name
@@ -135,7 +136,6 @@ namespace MyBlog.UI.Controllers
             };
             return View(article);
         }
-
 
 
         [HttpPost]
@@ -170,11 +170,11 @@ namespace MyBlog.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ArticleList(string categoryId = null, string userId = null)
+        public async Task<IActionResult> ArticleList(string categoryId = null, string userId = null, string filter = null)
         {
            
             var articlesDto = await _unitOfWork.ArticleService.GetFilteredListAsync(
-                where: query => (string.IsNullOrEmpty(categoryId) || query.CategoryId == categoryId) &&(string.IsNullOrEmpty(userId) || query.AppUserId == userId),
+                where: query => (string.IsNullOrEmpty(categoryId) || query.CategoryId == categoryId) &&(string.IsNullOrEmpty(userId) || query.AppUserId == userId) && (string.IsNullOrEmpty(filter) || query.Title.ToLower().Contains(filter.ToLower())),
                 orderBy: query => query.OrderByDescending(article => article.CreateDate)
             );
 
@@ -186,9 +186,11 @@ namespace MyBlog.UI.Controllers
                 var category = await _unitOfWork.CategoryService
                     .GetByIdAsync(article.CategoryId);
                 var user = await _userManager.FindByIdAsync(article.AppUserId);
+                var commentCount = await _unitOfWork.CommentService.CountAsync(x => (x.ArticleId==article.Id)&&(x.Status!=EntityStatus.Deleted));
 
                 var articleVM = new ArticleVM
                 {
+                    CommentCount = commentCount.ToString(),
                     Title = article.Title,
                     Content = article.Content,
                     AppUserImage = ImageHelper.GetThumbnailUrl(user.ImageUrl),
@@ -210,6 +212,31 @@ namespace MyBlog.UI.Controllers
 
             }
 
+            return PartialView(articlesVM);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MostViewedArticles()
+        {
+            var articlesVM = new List<ArticleVM>();
+            var articlesDto = await _unitOfWork.ArticleService.GetFilteredListAsync(
+                orderBy: query => query.OrderByDescending(article => article.ViewCount).ThenByDescending(article => article.CreateDate), take: 5
+            );
+            foreach (var article in articlesDto) 
+            {
+                var user = await _userManager.FindByIdAsync(article.AppUserId);
+                var articleVM = new ArticleVM
+                {
+                    Title = article.Title,
+                    AppUserName = user.UserName,
+                    Id = article.Id,
+                    
+                    Date = TimeHelper.ToTimeAgo(article.CreateDate),
+                    
+                    AppUserImage = ImageHelper.GetThumbnailUrl(user.ImageUrl)
+                };
+                articlesVM.Add(articleVM);
+            }
             return PartialView(articlesVM);
         }
 

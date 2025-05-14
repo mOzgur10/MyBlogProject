@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MyBlog.Core.CoreEntities.Entities;
 using MyBlog.Infrastructure.Configurations;
-using MyBlog.Infrastructure.DataSeeders;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

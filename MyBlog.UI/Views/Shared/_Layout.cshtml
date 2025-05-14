@@ -34,6 +34,7 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item d-flex align-items-center me-3">
                             <a class="btn btn-outline-secondary btn-sm"
+                            asp-area=""
                                asp-controller="@(User.Identity.IsAuthenticated ? "Article" : "Account")"
                                asp-action="@(User.Identity.IsAuthenticated ? "CreateArticle" : "Login")">
                                 <i class="bi bi-pencil-square"></i> Write
@@ -55,8 +56,8 @@
                                     <img src="@userImage" alt="User" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;" />
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" asp-controller="AppUser" asp-action="UserProfile" asp-route-id="@userId">My Profile</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                    <li><a class="dropdown-item"  asp-area="" asp-controller="AppUser" asp-action="UserProfile" asp-route-id="@userId">My Profile</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
                                 </ul>
                             </li>
                         }

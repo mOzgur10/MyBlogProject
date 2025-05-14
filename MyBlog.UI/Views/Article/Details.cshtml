@@ -16,14 +16,16 @@
             <div class="row">
                 <div class="col-12 mx-auto border-top border-bottom border-secondary-subtle py-3 mb-5">
                     <div class="d-flex justify-content-between text-muted small">
-                        <!-- Sol grup -->
+                        
                         <div class="d-flex align-items-center gap-2">
+                            <a asp-controller="AppUser" asp-action="UserProfile" asp-route-id="@Model.AppUserId" class="text-muted text-decoration-none">
                             <img src="@Model.AppUserImage" alt="User Photo"
                                  class="rounded-circle" style="width: 28px; height: 28px; object-fit: cover;">
                             <span>@Model.AppUserName</span>
+                            </a>
                         </div>
 
-                        <!-- Sağ grup -->
+                        
                         <div class="d-flex align-items-center gap-3">
                             <span>@Model.Date</span>
                             <span>@Model.ReadTime min read</span>
@@ -35,7 +37,7 @@
             @if (!string.IsNullOrEmpty(Model.ImageUrl))
             {
                 <div class="text-center mb-4">
-                    <img src="@Model.ImageUrl" alt="Makale Görseli" class="img-fluid rounded" style="max-height: 500px; object-fit: cover;">
+                    <img src="@Model.ImageUrl" alt="Article Image" class="img-fluid rounded" style="max-height: 500px; object-fit: cover;">
                 </div>
             }
 
@@ -47,10 +49,10 @@
             {
                 <div class="text-end mb-4">
                    
-                    <a asp-controller="Article" asp-action="UpdateArticle" asp-route-id="@Model.Id" class="btn btn-warning me-2">Düzenle</a>
+                    <a asp-controller="Article" asp-action="UpdateArticle" asp-route-id="@Model.Id" class="btn btn-warning me-2">Edit</a>
 
                     
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteArticleModal">Sil</button>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteArticleModal">Delete</button>
                 </div>
             }
             
@@ -59,25 +61,34 @@
     </div>
 </div>
 <div id="commentSection" class="col-12 col-md-8 mx-auto mt-5" ></div>
-<div class="text-end col-12 col-md-8 mx-auto mt-4">
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Yorum Yaz</button>
-</div>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="text-end col-12 col-md-8 mx-auto mt-4">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Comment!</button>
+    </div>
+}
+else
+{
+    <div class="text-end col-12 col-md-8 mx-auto mt-4">
+        <a class="btn btn-outline-primary" href="/Account/Login">Login to comment</a>
+    </div>
+}
 
 <div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <form method="post" asp-controller="Article" asp-action="DeleteArticle">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteArticleModalLabel">Makale Sil</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    <h5 class="modal-title" id="deleteArticleModalLabel">Delete Article</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Bu makaleyi silmek istediğinizden emin misiniz?</p>
+                    <p>Are you sure to delete this article?</p>
                     <input type="hidden" id="deleteArticleId" name="id" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
-                    <button type="submit" class="btn btn-danger">Sil</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
                 </div>
             </form>
         </div>
@@ -88,16 +99,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="commentModalLabel">Yorum Ekle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                <h5 class="modal-title" id="commentModalLabel">Comment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <textarea id="commentText" class="form-control" rows="4" placeholder="Yorumunuzu yazın..."></textarea>
+                <textarea id="commentText" class="form-control" rows="4" placeholder="Write your comment..."></textarea>
                 <input type="hidden" id="articleId" value="@Model.Id" />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                <button type="button" class="btn btn-success" id="submitComment">Gönder</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="submitComment">Send</button>
             </div>
         </div>
     </div>
@@ -107,17 +118,17 @@
         <div class="modal-content">
             <form id="deleteCommentForm" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteCommentModalLabel">Yorumu Sil</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    <h5 class="modal-title" id="deleteCommentModalLabel">Delete Comment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Yorumu silmek istediğinizden emin misiniz?</p>
+                    <p>Are you sure to delete comment?</p>
                     <input type="hidden" id="deleteCommentId" name="commentId" />
                     
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
-                    <button type="submit" class="btn btn-danger">Sil</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
                 </div>
             </form>
         </div>
@@ -139,8 +150,8 @@
         $(document).ready(function () {
             loadComments();
                 $('.btn-danger').click(function () {
-            const articleId = '@Model.Id';  // Id'yi modelden alıyoruz
-            $('#deleteArticleId').val(articleId); // Modalın input'unu set ediyoruz
+            const articleId = '@Model.Id';  
+            $('#deleteArticleId').val(articleId); 
         });
             
             $('#submitComment').click(function () {
@@ -148,7 +159,7 @@
                 const articleId = $('#articleId').val();
 
                 if (!commentText.trim()) {
-                    alert("Yorum boş olamaz.");
+                    alert("Comment cannot be empty!");
                     return;
                 }
 
@@ -165,7 +176,7 @@
                         loadComments();
                     },
                     error: function () {
-                        alert("Yorum gönderilirken bir hata oluştu.");
+                        alert("Something went wrong while submitting your comment.");
                     }
                 });
             });
@@ -182,10 +193,10 @@
                     data: { commentId: commentId },
                     success: function () {
                         $('#deleteCommentModal').modal('hide');
-                        loadComments(); // Silindikten sonra tekrar listele
+                        loadComments(); 
                     },
                     error: function () {
-                        alert("Yorum silinirken bir hata oluştu.");
+                        alert("Something went wrong while deleting comment.");
                     }
                 });
             });

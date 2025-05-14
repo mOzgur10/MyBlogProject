@@ -6,7 +6,7 @@
 
 
 <div class="mt-5">
-    <h5 class="mb-4">Yorumlar (@Model.Count)</h5>
+    <h5 class="mb-4">Comments (@Model.Count)</h5>
 
     @if (Model.Any())
     {
@@ -32,8 +32,8 @@
                         @if (comment.AppUserId == currentUserId || User.IsInRole("Admin") || User.IsInRole("Editor"))
                         {
                             <div>
-                                <button class="btn btn-sm btn-warning me-1 edit-comment-btn" data-id="@comment.Id">Düzenle</button>
-                                <button class="btn btn-sm btn-danger delete-comment-btn" data-id="@comment.Id" data-bs-toggle="modal" data-bs-target="#deleteCommentModal">Sil</button>
+                                <button class="btn btn-sm btn-warning me-1 edit-comment-btn" data-id="@comment.Id">Edit</button>
+                                <button class="btn btn-sm btn-danger delete-comment-btn" data-id="@comment.Id" data-bs-toggle="modal" data-bs-target="#deleteCommentModal">Delete</button>
                             </div>
                         }
                     </div>
@@ -44,20 +44,18 @@
     }
     else
     {
-        <p class="text-muted">Henüz yorum yok.</p>
+        <p class="text-muted">There is no comment.</p>
     }
 </div>
 
 <script>
         $(document).ready(function () {
-        // Silme butonuna tıklama
+        
         $('.delete-comment-btn').on('click', function () {
-            var commentId = $(this).data('id');  // Yorumun ID'si
+            var commentId = $(this).data('id'); 
 
-            // Modal'daki gizli input'a yorum ID'sini ekle
             $('#deleteCommentId').val(commentId);
 
-            // Modal'ı göster
             $('#deleteCommentModal').modal('show');
         });
 

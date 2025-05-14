@@ -62,7 +62,7 @@ namespace MyBlog.Application.Services
         public async Task<IList<TDto>> GetFilteredListAsync(
     Expression<Func<TEntity, bool>> where = null,
     Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-    Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> join = null)
+    Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> join = null, int? take = null)
         {
             var result = await _unitOfWork.GetRepository<TEntity>()
                 .GetFilteredListModelAsync(x => x, where, orderBy, join);
@@ -79,6 +79,11 @@ namespace MyBlog.Application.Services
                 .GetFilteredModelAsync(x => x, where, orderBy, join);
 
             return _unitOfWork.Mapper.Map<TDto>(result);
+        }
+
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> filter = null)
+        {
+            return await _unitOfWork.GetRepository<TEntity>().CountAsync(filter);
         }
     }
 }

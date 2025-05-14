@@ -6,51 +6,137 @@
 
 <div>
     <div class="container mt-4">
-        
-            <div class="d-flex justify-content-center overflow-auto gap-2 py-2 px-1">
-            <button class="btn btn-outline-secondary  category-btn"
+        <div class="d-flex justify-content-center overflow-auto gap-2 py-2 px-1">
+            <button class="btn btn-outline-secondary category-btn"
                     onclick="loadArticlesByCategory('', this)">
                 All Articles
             </button>
             @foreach (var item in Model)
             {
-                <button class="btn btn-outline-secondary  category-btn"
+                <button class="btn btn-outline-secondary category-btn"
                         onclick="loadArticlesByCategory('@item.Id', this)">
                     @item.Name
                 </button>
             }
-            </div>
-        <div class="col-md-9" id="main-content">
-            <!-- Dinamik içerik burada yüklenecek -->
         </div>
-        
+
+        <div class="d-flex justify-content-center mt-2">
+            <input id="search-box" type="text" class="form-control form-control-sm w-50"
+                   placeholder="Search articles..." />
+        </div>
+
+        <div class="row mt-4">
+            
+            <div class="col-md-8" id="main-content">
+                
+            </div>
+
+            
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-center text-body">Most Viewed Articles</h5>
+                        <ul class="list-group list-group-flush" id="most-viewed-list">
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
 </div>
+
+
 @section Scripts {
+    
     <script>
-                $(document).ready(function () {
+        let debounceTimer;
+
+        $(document).ready(function () {
             $('.category-btn').first().trigger('click');
+            loadMostViewedArticles();
+
+            // Arama kutusu için event
+            
         });
-        function loadArticlesByCategory(categoryId,button) {
+
+                $('#search-box').on('input', function () {
+            const searchQuery = $(this).val().trim();
+
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function () {
+                if (searchQuery === '') {
+                    // All Articles butonunu seçili hale getir
+                    const allBtn = $('.category-btn').first();
+
+                    $('.category-btn')
+                        .removeClass('btn-secondary active')
+                        .addClass('btn-outline-secondary');
+
+                    allBtn
+                        .removeClass('btn-outline-secondary')
+                        .addClass('btn-secondary active');
+
+                    loadArticlesByCategory('', allBtn[0]); // kategori filtresi sıfırla
+                } else {
+                    // Kategori seçimini kaldır
+                    $('.category-btn')
+                        .removeClass('btn-secondary active')
+                        .addClass('btn-outline-secondary');
+
+                    loadArticlesByFilter(searchQuery);
+                }
+            }, 300);
+        });
+
+        function loadArticlesByCategory(categoryId, button) {
+            $('#search-box').val(''); // Arama kutusunu temizle
+
             $.ajax({
                 url: '/Article/ArticleList',
                 type: 'GET',
                 data: { categoryId: categoryId },
                 success: function (html) {
                     $('#main-content').html(html);
-                   $('.category-btn')
-                .removeClass('btn-secondary active')
-                .addClass('btn-outline-secondary');
 
-            
-            $(button)
-                .removeClass('btn-outline-secondary')
-                .addClass('btn-secondary active');
+                    // Butonları güncelle
+                    $('.category-btn')
+                        .removeClass('btn-secondary active')
+                        .addClass('btn-outline-secondary');
 
+                    $(button)
+                        .removeClass('btn-outline-secondary')
+                        .addClass('btn-secondary active');
                 },
                 error: function () {
-                    $('#main-content').html('<p>Makaleler yüklenemedi.</p>');
+                    $('#main-content').html('<p>Failed to load articles.</p>');
+                }
+            });
+        }
+
+        function loadArticlesByFilter(filter) {
+            $.ajax({
+                url: '/Article/ArticleList',
+                type: 'GET',
+                data: { filter: filter },
+                success: function (html) {
+                    $('#main-content').html(html);
+                },
+                error: function () {
+                    $('#main-content').html('<p>Failed to load articles.</p>');
+                }
+            });
+        }
+
+        function loadMostViewedArticles() {
+            $.ajax({
+                url: '/Article/MostViewedArticles',
+                type: 'GET',
+                success: function (html) {
+                    $('#most-viewed-list').html(html);
+                },
+                error: function () {
+                    $('#most-viewed-list').html('<li class="list-group-item">Failed to load the most viewed articles.</li>');
                 }
             });
         }

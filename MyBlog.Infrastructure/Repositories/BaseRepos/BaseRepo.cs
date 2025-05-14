@@ -53,7 +53,7 @@ namespace MyBlog.Infrastructure.Repositories.BaseRepos
             _table.Update(entity);
         }
 
-        public async Task<IList<TResult>> GetFilteredListModelAsync<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> join = null)
+        public async Task<IList<TResult>> GetFilteredListModelAsync<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> join = null, int? take =null)
         {
             IQueryable<T> query = _table;
 
@@ -66,9 +66,15 @@ namespace MyBlog.Infrastructure.Repositories.BaseRepos
                 query = query.Where(where);
 
             if (orderBy != null)
-                return await orderBy(query).Select(select).ToListAsync();
-            else
-                return await query.Select(select).ToListAsync();
+                query = orderBy(query);
+
+            
+            if (take.HasValue)
+            {
+                query = query.Take(take.Value); 
+            }
+
+            return await query.Select(select).ToListAsync();
         }
 
         public async Task<TResult> GetFilteredModelAsync<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> join = null)
@@ -87,6 +93,9 @@ namespace MyBlog.Infrastructure.Repositories.BaseRepos
                 return await query.Select(select).FirstOrDefaultAsync();
         }
 
-
+        public async Task<int> CountAsync(Expression<Func<T, bool>> filter = null)
+        {
+            return await _table.CountAsync(filter);
+        }
     }
 }

@@ -49,9 +49,11 @@ namespace MyBlog.UI.Controllers
             _unitOfWork.CategoryService.Update(dto);
             await _unitOfWork.CommitChangesAsync();
 
-            return RedirectToAction("Index", "Admin", new { area = "Admin", loadPartial = "/Category/CategoryList" });
+            return Ok();
         }
+
         
+
 
         [HttpGet]
         public IActionResult CreateCategory()
@@ -67,22 +69,27 @@ namespace MyBlog.UI.Controllers
                     var category = new CategoryDTO()
                     {
                         Name = name,
-                        Id =Guid.NewGuid().ToString()//??????
+                        Id =Guid.NewGuid().ToString()
                     };
 
                     
             await _unitOfWork.CategoryService.CreateAsync(category);
             await _unitOfWork.CommitChangesAsync();
-
-            return RedirectToAction("Index", "Admin", new { area = "Admin", loadPartial = "/Category/CategoryList" });
+            return Ok();
+            
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteCategory(string Id)
         {
             await _unitOfWork.CategoryService.DeleteAsync(Id);
+            var articles = await _unitOfWork.ArticleService.GetAllAsync(x => x.CategoryId == Id);
+            foreach (var article in articles)
+            {
+                await _unitOfWork.ArticleService.DeleteAsync(article.Id);
+            }
             await _unitOfWork.CommitChangesAsync();
-            return RedirectToAction("Index", "Admin", new { area = "Admin", loadPartial = "/Category/CategoryList" });
+            return Ok();
         }
 
 

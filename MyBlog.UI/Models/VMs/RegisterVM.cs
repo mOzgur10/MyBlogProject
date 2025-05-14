@@ -4,13 +4,7 @@ namespace MyBlog.UI.Models.VMs
 {
     public class RegisterVM
     {
-        //[Required(ErrorMessage = "Required")]
-        //[Display(Name = "Name")]
-        //public string FirstName { get; set; }
-
-        //[Required(ErrorMessage = "Required")]
-        //[Display(Name = "Surname")]
-        //public string LastName { get; set; }
+       
 
         [Required(ErrorMessage = "Required")]
         [EmailAddress]

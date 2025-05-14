@@ -4,15 +4,14 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>Register</h1>
+<h2 class="text-center">Register</h2>
 
-<h4>RegisterVM</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Register">
+    <div class="col-md-4 mx-auto">
+        <form id="registerForm" asp-action="Register" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
@@ -23,22 +22,93 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
+            <div class="form-group mb-1">
+                <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Register" class="btn btn-primary" />
             </div>
         </form>
+        <div id="registerErrors" class="mt-3"></div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+
+
+
+<div class="modal fade" id="registerSuccessModal" tabindex="-1" aria-labelledby="registerSuccessModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="registerSuccessModalLabel">Registration Successful</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="fs-5 mb-3">Your account has been created!</p>
+                <p class="text-muted">A confirmation email has been sent to your email address. Please check your inbox to verify your account.</p>
+                <p id="countdownText" class="mt-3 text-secondary">Redirecting in 5 seconds...</p>
+            </div>
+            
+        </div>
+    </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        let redirectTimer;
+
+        $('#registerForm').submit(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/Account/Register',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (res) {
+                    if (res.success) {
+                        const modalElement = document.getElementById('registerSuccessModal');
+                        const modal = new bootstrap.Modal(modalElement);
+
+                        modalElement.addEventListener('shown.bs.modal', function () {
+                            let countdown = 5;
+                            const countdownText = document.getElementById('countdownText');
+                            countdownText.textContent = `Redirecting in ${countdown} seconds...`;
+
+                            const interval = setInterval(() => {
+                                countdown--;
+                                countdownText.textContent = `Redirecting in ${countdown} seconds...`;
+                                if (countdown <= 0) {
+                                    clearInterval(interval);
+                                    modal.hide();
+                                }
+                            }, 1000);
+
+                            
+                            redirectTimer = setTimeout(() => {
+                                modal.hide();
+                            }, 5000);
+                        });
+
+                        modalElement.addEventListener('hidden.bs.modal', function () {
+                            window.location.href = '/Home/Index';
+                        });
+
+                        modal.show();
+                        $('#registerForm')[0].reset();
+                    } else {
+                        let errors = res.errors || [];
+                        $('#registerErrors').empty();
+                        errors.forEach(error => {
+                            $('#registerErrors').append(`<div class="text-danger">${error}</div>`);
+                        });
+                    }
+                }
+            });
+        });
+    </script>
 }
