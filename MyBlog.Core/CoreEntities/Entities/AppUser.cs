@@ -12,14 +12,12 @@ namespace MyBlog.Core.CoreEntities.Entities
 {
     public class AppUser : IdentityUser , IBaseEntity
     {
-        public string FirstName { get; set; }
-        public string  LastName { get; set; }
-
-        [NotMapped]
-        public string FullName { get { return FirstName + " " + LastName; } }
-
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-
+        
+        public AppUser()
+        {
+            Articles = new List<Article>();
+            Comments = new List<Comment>();
+        }
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeleteDate { get; set; }
@@ -29,5 +27,9 @@ namespace MyBlog.Core.CoreEntities.Entities
         public virtual ICollection<Article> Articles { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public string? AboutMe { get; set; }
     }
 }

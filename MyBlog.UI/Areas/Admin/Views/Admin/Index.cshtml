@@ -1,0 +1,503 @@
+﻿@* @{
+    ViewData["Title"] = "Admin Panel - Anasayfa";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 bg-light p-4">
+            <h4 class="text-center">Admin Panel</h4>
+            <ul class="nav flex-column mt-5">
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);" onclick="loadPartialView('/Category/CategoryList')">Kategoriler</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);" onclick="loadPartialView('/AppUser/AppUserList')">Kullanıcılar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);" onclick="loadPartialView('/Admin/Admin/ArticleListBasic')">Makaleler</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9" id="main-content">
+            <!-- Dinamik içerik burada yüklenecek -->
+        </div>
+    </div>
+</div> *@
+
+
+@{
+    ViewData["Title"] = "Admin Panel - Anasayfa";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <!-- Sidebar -->
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-light shadow-sm border-end min-vh-100">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-3">
+                
+                    <span class="fs-5 fw-semibold d-none d-sm-inline text-secondary">Admin Panel</span>
+                
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start mt-4 w-100">
+                    <li class="nav-item w-100">
+                        <a href="javascript:void(0);" onclick="loadPartialView('/Category/CategoryList')" class="nav-link text-dark px-2">
+                            <i class="bi bi-tags-fill me-2"></i>
+                            <span class="d-none d-sm-inline">Kategoriler</span>
+                        </a>
+                    </li>
+                    <li class="nav-item w-100">
+                        <a href="javascript:void(0);" onclick="loadPartialView('/AppUser/AppUserList')" class="nav-link text-dark px-2">
+                            <i class="bi bi-people-fill me-2"></i>
+                            <span class="d-none d-sm-inline">Kullanıcılar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item w-100">
+                        <a href="javascript:void(0);" onclick="loadPartialView('/Admin/Admin/ArticleListBasic')" class="nav-link text-dark px-2">
+                            <i class="bi bi-journal-text me-2"></i>
+                            <span class="d-none d-sm-inline">Makaleler</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+       
+        <div class="col py-4" id="main-content">
+            
+            <h3 class="mb-4">Hoş geldiniz!</h3>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="deleteCategoryForm" asp-action="DeleteCategory" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteCategoryModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete category <strong id="deleteCategoryName"></strong>?</p>
+                    <input type="hidden" name="Id" id="deleteCategoryId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="deleteArticleForm" asp-area="" asp-controller="Article" asp-action="DeleteArticle" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteArticleModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete article?</p>
+                    <input type="hidden" name="Id" id="deleteArticleId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="editCategoryForm" asp-action="UpdateCategory" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Id" id="editCategoryId" />
+                    <div class="mb-3">
+                        <label for="editCategoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" name="Name" id="editCategoryName" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="createCategoryForm" asp-action="CreateCategory" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createCategoryModalLabel">Add New Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="createCategoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" name="Name" id="createCategoryName" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="deleteUserForm"  method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteUserModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete user <strong id="deleteUserName"></strong>?</p>
+                    <input type="hidden" name="Id" id="deleteUserId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+
+        <div class="modal-content shadow">
+            <form id="editUserForm" method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="editProfileModalLabel">Profili Düzenle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Id"  id="editUserId" />
+                    <div class="mb-3">
+                        <label for="UserName" class="form-label">Kullanıcı Adı</label>
+                        <input type="text" class="form-control" id="editUserName" name="UserName"  required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="Email" id="editUserEmail"  required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="AboutMe" class="form-label">Hakkımda</label>
+                        <textarea class="form-control" name="AboutMe" id="editUserAboutMe" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Image" class="form-label">Profil Fotoğrafı</label>
+                        <input type="file" class="form-control" name="image" id="editUserImage" accept="image/*" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="assignRoleModal" tabindex="-1" aria-labelledby="assignRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="assignRoleForm" method="post" action="/AppUser/AssignRole">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignRoleModalLabel">Rol Ata</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="userIdInput" name="userId" /> <!-- Kullanıcı ID'sini burada alacak -->
+                    <div class="form-group">
+                        <label for="roleSelect">Rol Seçin:</label>
+                        <select id="roleSelect" name="role" class="form-control">
+                            <!-- Roller buraya eklenecek -->
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" class="btn btn-primary">Ata</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var loadPartial = '@ViewBag.LoadPartial';
+            if (loadPartial) {
+                loadPartialView(loadPartial);
+            }
+        });
+
+        function loadPartialView(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (html) {
+                    $('#main-content').html(html);
+                },
+                error: function () {
+                    $('#main-content').html('<p>İçerik yüklenemedi.</p>');
+                }
+            });
+        }
+        
+        $(document).on('click', '.editUserBtn', function () {
+            var userId = $(this).data('id');
+            var userName = $(this).data('username');
+            var email = $(this).data('email');
+            var aboutme = $(this).data('aboutme');
+            var imageurl = $(this).data('imageurl');
+
+            $('#editUserId').val(userId);
+            $('#editUserName').val(userName);
+            $('#editUserEmail').val(email);
+            $('#editUserAboutMe').val(aboutme);
+            $('#editUserImage').val(imageurl);
+
+        });
+
+        $(document).on('click', '.deleteArticleBtn', function () {
+            var articleId = $(this).data('id');
+
+            $('#deleteArticleId').val(articleId);
+           
+        });
+
+        $(document).on('click', '.deleteUserBtn', function () {
+            var userId = $(this).data('id');
+
+            $('#deleteUserId').val(userId);
+
+        });
+
+        // Edit modal açma
+        $(document).on('click', '.editCategoryBtn', function () {
+            var categoryId = $(this).data('id');
+            var categoryName = $(this).data('name');
+
+            $('#editCategoryId').val(categoryId);
+            $('#editCategoryName').val(categoryName); // Burada `.text()` değil `.val()` olmalı
+        });
+
+        // Delete modal açma
+        $(document).on('click', '.deleteCategoryBtn', function () {
+            var categoryId = $(this).data('id');
+            var categoryName = $(this).data('name');
+
+            $('#deleteCategoryId').val(categoryId);
+            $('#deleteCategoryName').text(categoryName);
+        });
+
+        // Delete işlemi
+        $('#deleteCategoryForm').submit(function (e) {
+            e.preventDefault();
+            var categoryId = $('#deleteCategoryId').val();
+
+            $.ajax({
+                url: '/Category/DeleteCategory',
+                type: 'POST',
+                data: { id: categoryId },
+                success: function () {
+                    loadPartialView('/Category/CategoryList');
+                    $('#deleteCategoryModal').modal('hide');
+                },
+                error: function () {
+                    alert('Silme işlemi sırasında bir hata oluştu!');
+                }
+            });
+        });
+
+        $('#deleteArticleForm').submit(function (e) {
+            e.preventDefault();
+            var articleId = $('#deleteArticleId').val();
+
+            $.ajax({
+                url: '/Article/DeleteArticle',
+                type: 'POST',
+                data: { id: articleId },
+                success: function () {
+                    loadPartialView('/Admin/Admin/ArticleListBasic');
+                    $('#deleteArticleModal').modal('hide');
+                },
+                error: function () {
+                    alert('Silme işlemi sırasında bir hata oluştu!');
+                }
+            });
+        });
+
+        // Update işlemi (edit)
+        $('#editCategoryForm').submit(function (e) {
+            e.preventDefault();
+            var categoryId = $('#editCategoryId').val();
+            var categoryName = $('#editCategoryName').val();
+
+            $.ajax({
+                url: '/Category/UpdateCategory',
+                type: 'POST',
+                data: {
+                    Id: categoryId,
+                    Name: categoryName
+                },
+                success: function () {
+                    loadPartialView('/Category/CategoryList');
+                    $('#editCategoryModal').modal('hide');
+                },
+                error: function () {
+                    alert('Güncelleme işlemi sırasında bir hata oluştu!');
+                }
+            });
+        });
+
+                $('#createCategoryForm').submit(function (e) {
+            e.preventDefault();
+            var categoryName = $('#createCategoryName').val();
+
+            $.ajax({
+                url: '/Category/CreateCategory',
+                type: 'POST',
+                data: {
+                    Name: categoryName
+                },
+                success: function () {
+                    loadPartialView('/Category/CategoryList'); // Listeyi güncelle
+                    $('#createCategoryModal').modal('hide');  // Modalı kapat
+                    $('#createCategoryForm')[0].reset();      // Formu sıfırla
+                },
+                error: function () {
+                    alert('Kategori oluşturulurken bir hata oluştu!');
+                }
+            });
+        });
+
+                   $('#editUserForm').submit(function (e) {
+            e.preventDefault();
+
+            var form = $('#editUserForm')[0];
+            var formData = new FormData(form);
+
+            $.ajax({
+                url: '/AppUser/UpdateUser',
+                type: 'POST',
+                data: formData,
+                processData: false, // jQuery’nin form verisini string’e çevirmemesi için
+                contentType: false, // FormData kendi content-type’ını belirler
+                success: function () {
+                    $('#editProfileModal').modal('hide');
+                    loadPartialView('/AppUser/AppUserList');
+                },
+                error: function () {
+                    alert('Kullanıcı güncellenirken hata oluştu!');
+                }
+            });
+        });
+
+                $(document).on('click', '.assignUserRoleBtn', function () {
+            var userId = $(this).data('id'); // Kullanıcı ID'sini al
+            var currentRole = $(this).data('role');
+            // Modal açılmadan önce rollerin listesini AJAX ile al
+            $.ajax({
+                url: '/AppUser/GetRolesForAssign',  // Controller'daki metodu çağırıyoruz
+                type: 'GET',
+                success: function (data) {
+                    // Role seçeneklerini sıfırla
+                    $('#roleSelect').empty();
+
+                    // Gelen verileri select içine ekle
+                    data.forEach(function(role) {
+                        if(currentRole!=role){
+                            $('#roleSelect').append('<option value="' + role + '">' + role + '</option>');
+                        }else{
+                            $('#roleSelect').append('<option value="' + role + '" selected>' + role + '</option>');
+                        }
+                        
+                    });
+
+                    // Kullanıcı ID'sini hidden input'a yerleştir
+                    $('#userIdInput').val(userId);
+
+                    // Modalı göster
+                    $('#assignRoleModal').modal('show');
+                },
+                error: function () {
+                    alert("Roller yüklenirken hata oluştu!");
+                }
+            });
+        });
+                       $('#assignRoleForm').submit(function (e) {
+            e.preventDefault(); // Formun normal submit olmasını engelle
+
+            var userId = $('#userIdInput').val(); // Kullanıcı ID'sini al
+            var role = $('#roleSelect').val(); // Seçilen rolü al
+
+            $.ajax({
+                url: '/AppUser/AssignRole',  // POST metodunu çağırıyoruz
+                type: 'POST',
+                data: {
+                    userId: userId,
+                    role: role
+                },
+                success: function () {
+                    // Başarıyla rol atandı
+                     loadPartialView('/AppUser/AppUserList');
+
+                    // Modalı kapat
+                    $('#assignRoleModal').modal('hide');
+                    
+                },
+                error: function () {
+                    alert("Rol atama işlemi başarısız oldu!");
+                }
+            });
+        });
+
+        $('#deleteUserForm').on('submit', function (e) {
+            e.preventDefault();
+            var userId = $('#deleteUserId').val();
+            
+
+            $.ajax({
+                url: '/AppUser/deleteUser',
+                type: 'POST',
+                data: {id : userId},
+                success: function (response) {
+                    
+                    
+
+                    loadPartialView('/AppUser/AppUserList');
+                    $('#deleteUserModal').modal('hide');
+                },
+                error: function () {
+                    alert('An error occurred while deleting the user.');
+                }
+            });
+        });
+
+    </script>
+
+}

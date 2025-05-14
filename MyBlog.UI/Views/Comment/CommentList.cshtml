@@ -1,0 +1,65 @@
+﻿@model List<MyBlog.UI.Models.VMs.CommentVM>
+@using System.Security.Claims
+@{
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+
+<div class="mt-5">
+    <h5 class="mb-4">Comments (@Model.Count)</h5>
+
+    @if (Model.Any())
+    {
+        @foreach (var comment in Model)
+        {
+            <div class="card mb-3 shadow-sm" id="comment-@comment.Id">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="card-subtitle text-muted d-flex align-items-center">
+                            <img src="@comment.AppUserImageUrl" alt="User Photo"
+                                 class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+
+                            <div class="d-flex flex-column">
+                                <a asp-controller="AppUser" asp-action="UserProfile" asp-route-id="@comment.AppUserId"
+                                   class="text-muted text-decoration-none">
+                                    <small>@comment.AppUserName</small>
+                                </a>
+                                <small class="text-muted">@comment.Date</small>
+                            </div>
+                        </h6>
+
+
+                        @if (comment.AppUserId == currentUserId || User.IsInRole("Admin") || User.IsInRole("Editor"))
+                        {
+                            <div>
+                                <button class="btn btn-sm btn-warning me-1 edit-comment-btn" data-id="@comment.Id">Edit</button>
+                                <button class="btn btn-sm btn-danger delete-comment-btn" data-id="@comment.Id" data-bs-toggle="modal" data-bs-target="#deleteCommentModal">Delete</button>
+                            </div>
+                        }
+                    </div>
+                    <p class="card-text mt-2">@comment.Content</p>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-muted">There is no comment.</p>
+    }
+</div>
+
+<script>
+        $(document).ready(function () {
+        
+        $('.delete-comment-btn').on('click', function () {
+            var commentId = $(this).data('id'); 
+
+            $('#deleteCommentId').val(commentId);
+
+            $('#deleteCommentModal').modal('show');
+        });
+
+    });
+</script>
+
+

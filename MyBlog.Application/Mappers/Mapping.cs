@@ -14,12 +14,27 @@ namespace MyBlog.Application.Mappers
     {
         public Mapping()
         {
-            CreateMap<AppUser, AppUserDTO>().ReverseMap();
-            CreateMap<Article, ArticleDTO>().ReverseMap();
-            CreateMap<Category, CategoryDTO>().ReverseMap();
-            CreateMap<Comment, CommentDTO>().ReverseMap();
-            //CreateMap<BaseEntity, IBaseEntity>().ReverseMap();
-          
+            CreateMap<AppUser, AppUserDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? Guid.NewGuid().ToString() : src.Id));
+
+            
+            CreateMap<Article, ArticleDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? Guid.NewGuid().ToString() : src.Id));
+            
+
+            
+            CreateMap<Category, CategoryDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? Guid.NewGuid().ToString() : src.Id));
+
+            
+            CreateMap<Comment, CommentDTO>()
+                .ReverseMap()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? Guid.NewGuid().ToString() : src.Id));
+            
+
         }
     }
 }

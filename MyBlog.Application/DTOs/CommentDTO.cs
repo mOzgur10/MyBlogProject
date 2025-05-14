@@ -8,7 +8,7 @@ namespace MyBlog.Application.DTOs
 {
     public class CommentDTO : IBaseEntityDTO
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string Content { get; set; }
         public  DateTime CreateDate { get; set; }
 

@@ -1,0 +1,70 @@
+﻿@using MyBlog.UI.Models.VMs
+@model IEnumerable<MyBlog.UI.Models.VMs.AppUserVM>
+
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>App Users</h4>
+        
+    </div>
+
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Email</th>
+                <th>UserName</th>
+                <th>Role</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var index = 1;
+            }
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@user.Email</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Role</td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-primary me-2 assignUserRoleBtn"
+                                data-id="@user.Id"
+                                data-role="@user.Role"
+                                data-bs-toggle="modal" data-bs-target="#assignRoleModal">
+                            Set Role
+                        </button>
+                        <button class="btn btn-sm btn-primary me-2 editUserBtn"
+                                data-id="@user.Id"
+                                data-username="@user.UserName"
+                                data-email="@user.Email"
+                                data-aboutme="@user.AboutMe"
+                                data-imageurl="@user.ImageUrl"
+                                data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            Edit
+                        </button>
+                        <a asp-area="" asp-action="UserProfile" asp-controller="AppUser" asp-route-id="@user.Id"  class="btn btn-sm btn-info me-2">Details</a>
+                        <button class="btn btn-sm btn-danger deleteUserBtn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteUserModal"
+                                data-id="@user.Id"
+                                data-username="@user.UserName">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+               
+                index++;
+            }
+        </tbody>
+    </table>
+    
+
+</div>
+
+
+
+
+

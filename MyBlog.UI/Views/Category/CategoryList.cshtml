@@ -1,0 +1,48 @@
+﻿@model IEnumerable<MyBlog.UI.Models.VMs.CategoryVM>
+
+<table class="table table-bordered table-striped align-middle" id="categoryTable">
+    <thead class="table-light">
+        <tr>
+            <th>#</th>
+            <th>Category Name</th>
+            <th class="text-end">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var index = 1;
+        }
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@index</td>
+                <td>@category.Name</td>
+                <td class="text-end">
+                    <button class="btn btn-sm btn-warning editCategoryBtn me-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editCategoryModal"
+                            data-id="@category.Id"
+                            data-name="@category.Name">
+                        Edit
+                    </button>
+
+                    <button class="btn btn-sm btn-danger deleteCategoryBtn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteCategoryModal"
+                            data-id="@category.Id"
+                            data-name="@category.Name">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            index++;
+        }
+    </tbody>
+</table>
+
+<div class="text-end mt-4">
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createCategoryModal">
+        Add New Category
+    </button>
+</div>
+
